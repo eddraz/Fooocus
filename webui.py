@@ -183,11 +183,19 @@ with shared.gradio_root:
                         shared.gradio_root.load(lambda: default_prompt, outputs=prompt)
 
                 with gr.Column(scale=3, min_width=0):
-                    generate_button = gr.Button(label="Generate", value="Generate", elem_classes='type_row', elem_id='generate_button', visible=True)
-                    reset_button = gr.Button(label="Reconnect", value="Reconnect", elem_classes='type_row', elem_id='reset_button', visible=False)
-                    load_parameter_button = gr.Button(label="Load Parameters", value="Load Parameters", elem_classes='type_row', elem_id='load_parameter_button', visible=False)
-                    skip_button = gr.Button(label="Skip", value="Skip", elem_classes='type_row_half', elem_id='skip_button', visible=False)
-                    stop_button = gr.Button(label="Stop", value="Stop", elem_classes='type_row_half', elem_id='stop_button', visible=False)
+                    with gr.Row(elem_classes='type_row'):
+                        generate_button = gr.Button("Generate", elem_classes='type_row', elem_id='generate_button', visible=True)
+                        skip_button = gr.Button("Skip", elem_id='skip_button')
+                        stop_button = gr.Button("Stop", elem_id='stop_button')
+                    with gr.Row(elem_classes='type_row'):
+                        prompt = gr.Textbox(show_label=False, placeholder="Type prompt here.", container=False, autofocus=True,
+                                          elem_id='prompt_input', lines=3,
+                                          value=modules.config.default_prompt)
+
+                    reset_button = gr.Button("Reconnect", elem_classes='type_row', elem_id='reset_button', visible=False)
+                    load_parameter_button = gr.Button("Load Parameters", elem_classes='type_row', elem_id='load_parameter_button', visible=False)
+                    skip_button = gr.Button("Skip", elem_classes='type_row_half', elem_id='skip_button', visible=False)
+                    stop_button = gr.Button("Stop", elem_classes='type_row_half', elem_id='stop_button', visible=False)
 
                     def stop_clicked(currentTask):
                         import ldm_patched.modules.model_management as model_management
@@ -304,7 +312,7 @@ with shared.gradio_root:
                                     inpaint_mask_box_threshold = gr.Slider(label="Box Threshold", minimum=0.0, maximum=1.0, value=0.3, step=0.05)
                                     inpaint_mask_text_threshold = gr.Slider(label="Text Threshold", minimum=0.0, maximum=1.0, value=0.25, step=0.05)
                                     inpaint_mask_sam_max_detections = gr.Slider(label="Maximum number of detections", info="Set to 0 to detect all", minimum=0, maximum=10, value=modules.config.default_sam_max_detections, step=1, interactive=True)
-                                generate_mask_button = gr.Button(value='Generate mask from image')
+                                generate_mask_button = gr.Button("Generate mask from image")
 
                                 def generate_mask(image, mask_model, cloth_category, dino_prompt_text, sam_model, box_threshold, text_threshold, sam_max_detections, dino_erode_or_dilate, dino_debug):
                                     from extras.inpaint_mask import generate_mask_from_image
@@ -350,8 +358,8 @@ with shared.gradio_root:
                                     choices=flags.describe_types,
                                     value=modules.config.default_describe_content_type)
                                 describe_apply_styles = gr.Checkbox(label='Apply Styles', value=modules.config.default_describe_apply_prompts_checkbox)
-                                describe_btn = gr.Button(value='Describe this Image into Prompt')
-                                describe_image_size = gr.Textbox(label='Image Size and Recommended Size', elem_id='describe_image_size', visible=False)
+                                describe_btn = gr.Button('Describe Image', elem_classes='type_row')
+                                describe_image_size = gr.HTML('Size: unknown')
                                 gr.HTML('<a href="https://github.com/lllyasviel/Fooocus/discussions/1363" target="_blank">\U0001F4D4 Documentation</a>')
 
                                 def trigger_show_image_properties(image):
@@ -371,7 +379,7 @@ with shared.gradio_root:
                         with gr.Column():
                             metadata_input_image = grh.Image(label='For images created by Fooocus', source='upload', type='pil')
                             metadata_json = gr.JSON(label='Metadata')
-                            metadata_import_button = gr.Button(value='Apply Metadata')
+                            metadata_import_button = gr.Button('Load Parameters', elem_classes='type_row')
 
                         def trigger_metadata_preview(file):
                             parameters, metadata_scheme = modules.meta_parser.read_info_from_image(file)
@@ -692,7 +700,7 @@ with shared.gradio_root:
                             lora_ctrls += [lora_enabled, lora_model, lora_weight]
 
                 with gr.Row():
-                    refresh_files = gr.Button(label='Refresh', value='\U0001f504 Refresh All Files', variant='secondary', elem_classes='refresh_button')
+                    refresh_files = gr.Button("Refresh Files", elem_classes='type_row', variant='secondary', elem_classes='refresh_button')
             with gr.Tab(label='Advanced'):
                 guidance_scale = gr.Slider(label='Guidance Scale', minimum=1.0, maximum=30.0, step=0.01,
                                            value=modules.config.default_cfg_scale,
@@ -925,7 +933,6 @@ with shared.gradio_root:
                     del preset_prepared['prompt']
 
                 return modules.meta_parser.load_parameter_button_click(json.dumps(preset_prepared), is_generating, inpaint_mode)
-
 
             def inpaint_engine_state_change(inpaint_engine_version, *args):
                 if inpaint_engine_version == 'empty':
