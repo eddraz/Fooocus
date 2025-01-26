@@ -15,7 +15,6 @@ os.environ['PYTHONPATH'] = os.path.abspath(".")
 import args_manager
 from modules.api_endpoints import app
 import uvicorn
-from pyngrok import ngrok
 
 def is_google_colab():
     try:
@@ -23,6 +22,38 @@ def is_google_colab():
         return True
     except:
         return False
+
+def setup_ngrok(port):
+    """Set up ngrok tunnel"""
+    try:
+        # Install ngrok if not already installed
+        os.system("pip install pyngrok")
+        from pyngrok import ngrok, conf
+        
+        # Check if NGROK_AUTH_TOKEN is in environment variables
+        auth_token = os.getenv('NGROK_AUTH_TOKEN')
+        if not auth_token:
+            print("\nNGROK_AUTH_TOKEN not found!")
+            print("Please set your ngrok auth token by running these commands in a new cell:")
+            print("1. Get your auth token from https://dashboard.ngrok.com/get-started/your-authtoken")
+            print("2. Run this command:")
+            print("   import os; os.environ['NGROK_AUTH_TOKEN'] = 'your_auth_token_here'")
+            print("\nThen run this script again.")
+            sys.exit(1)
+            
+        # Configure ngrok
+        conf.get_default().auth_token = auth_token
+        
+        # Start ngrok tunnel
+        public_url = ngrok.connect(port)
+        print(f"\nNgrok tunnel established!")
+        print(f"Public URL: {public_url}")
+        return public_url
+        
+    except Exception as e:
+        print(f"\nError setting up ngrok: {str(e)}")
+        print("Please make sure you have a valid auth token from https://dashboard.ngrok.com/get-started/your-authtoken")
+        sys.exit(1)
 
 def main():
     """Start the FastAPI server"""
@@ -36,18 +67,8 @@ def main():
     
     # Set up ngrok if running in Colab
     if is_google_colab():
-        try:
-            # Install ngrok if not already installed
-            os.system("pip install pyngrok")
-            from pyngrok import ngrok
-            
-            # Start ngrok
-            public_url = ngrok.connect(port)
-            print(f"\nPublic URL: {public_url}")
-            print(f"Local URL: http://{host}:{port}")
-        except Exception as e:
-            print(f"Error setting up ngrok: {str(e)}")
-            print(f"Falling back to local URL: http://{host}:{port}")
+        public_url = setup_ngrok(port)
+        print(f"Local URL: http://{host}:{port}")
     else:
         print(f"Starting server on http://{host}:{port}")
     
