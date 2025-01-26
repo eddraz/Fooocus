@@ -1,21 +1,21 @@
-"""gr.Image() component."""
-
 from __future__ import annotations
 
 import warnings
 import numpy as np
 from pathlib import Path
 from typing import Any, Literal
+import importlib
 
 from PIL import Image as _Image  # using _ to minimize namespace pollution
 
+import gradio
 from gradio import processing_utils, utils, Error
 from gradio.components import Component
 from gradio.blocks import Block
+
 from gradio_client import utils as client_utils
 from gradio_client.documentation import document, set_documentation_group
 from gradio_client.serializing import ImgSerializable
-import importlib
 
 set_documentation_group("component")
 _Image.init()  # fixes https://github.com/gradio-app/gradio/issues/2843
