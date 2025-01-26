@@ -18,17 +18,8 @@ from gradio_client.serializing import ImgSerializable
 from PIL import Image as _Image  # using _ to minimize namespace pollution
 
 from gradio import processing_utils, utils, Error
-from gradio.components.base import Component, _Keywords, Block
-from gradio.events import (
-    Changeable,
-    Clearable,
-    Editable,
-    EventListenerMethod,
-    Selectable,
-    Streamable,
-    Uploadable,
-)
-from gradio.interpretation import TokenInterpretable
+from gradio.components import Component, _Keywords, Block
+from gradio import events
 
 set_documentation_group("component")
 _Image.init()  # fixes https://github.com/gradio-app/gradio/issues/2843
@@ -36,15 +27,13 @@ _Image.init()  # fixes https://github.com/gradio-app/gradio/issues/2843
 
 @document()
 class Image(
-    Editable,
-    Clearable,
-    Changeable,
-    Streamable,
-    Selectable,
-    Uploadable,
+    events.Changeable,
+    events.Clearable,
+    events.Selectable,
+    events.Streamable,
+    events.Uploadable,
     Component,
     ImgSerializable,
-    TokenInterpretable,
 ):
     """
     Creates an image component that can be used to upload/draw images (as an input) or display images (as an output).
@@ -146,7 +135,7 @@ class Image(
         self.show_download_button = show_download_button
         if streaming and source != "webcam":
             raise ValueError("Image streaming only available if source is 'webcam'.")
-        self.select: EventListenerMethod
+        self.select: events.EventListenerMethod
         """
         Event listener for when the user clicks on a pixel within the image.
         Uses event data gradio.SelectData to carry `index` to refer to the [x, y] coordinates of the clicked pixel.
@@ -172,7 +161,6 @@ class Image(
             value=value,
             **kwargs,
         )
-        TokenInterpretable.__init__(self)
 
     def get_config(self):
         return {
