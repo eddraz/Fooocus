@@ -152,7 +152,11 @@ if isinstance(args_manager.args.preset, str):
     title += ' ' + args_manager.args.preset
 
 shared.gradio_root = gr.Blocks(title=title, css=modules.html.css)
-shared.gradio_root = gr.mount_gradio_app(shared.gradio_root, api_app, path="/api")
+
+# Mount the FastAPI app using the new Gradio 4.x API
+shared.gradio_root = shared.gradio_root.queue()
+app = shared.gradio_root.app
+app.mount("/api", api_app)
 
 with shared.gradio_root:
     currentTask = gr.State(worker.AsyncTask(args=[]))
