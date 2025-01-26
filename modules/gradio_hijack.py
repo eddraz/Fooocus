@@ -20,7 +20,6 @@ from PIL import Image as _Image  # using _ to minimize namespace pollution
 from gradio import processing_utils, utils, Error
 from gradio.components import Component
 from gradio.blocks import Block
-from gradio.data_classes import _Keywords
 from gradio import events
 
 set_documentation_group("component")
@@ -186,7 +185,7 @@ class Image(
 
     @staticmethod
     def update(
-        value: Any | Literal[_Keywords.NO_VALUE] | None = _Keywords.NO_VALUE,
+        value: Any | None = None,
         height: int | None = None,
         width: int | None = None,
         label: str | None = None,
