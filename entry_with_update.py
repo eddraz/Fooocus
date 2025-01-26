@@ -1,37 +1,39 @@
 import os
 import sys
-import platform
-import signal
+from pathlib import Path
 
-from modules.launch_util import fooocus_assert, check_system
-
-fooocus_assert(check_system())
+# Set up environment
+root = str(Path(__file__).parent)
+sys.path.append(root)
+os.chdir(root)
 
 os.environ['GRADIO_ANALYTICS_ENABLED'] = 'False'
 os.environ['BITSANDBYTES_NOWELCOME'] = '1'
 os.environ['PYTHONPATH'] = os.path.abspath(".")
 
-from args_manager import args
-import modules.flags
-import modules.config
-
-# Disable the visual interface
-args.disable_gradio_queue = True
-
-from modules.api_endpoints import app as api_app
+# Import necessary modules
+import args_manager
+from modules.api_endpoints import app
 import uvicorn
 
-def run_api_server():
+def main():
     """Start the FastAPI server"""
+    args = args_manager.args
     host = args.listen or '127.0.0.1'
     port = args.port or 8888
     
-    print(f"\nFooocus API Server starting on http://{host}:{port}")
-    print("Available endpoints:")
-    print("  - POST /api/v1/inpaint-clothing")
+    print(f"\nFooocus API Server")
+    print(f"Starting server on http://{host}:{port}")
+    print("\nAvailable endpoints:")
+    print("  - POST /api/v1/generate - Generate images from text or image")
+    print("  - POST /api/v1/inpaint - Inpaint images with mask")
+    print("  - POST /api/v1/upscale - Upscale images")
+    print("  - GET  /api/v1/styles - Get available styles")
+    print("  - GET  /api/v1/models - Get available models")
+    print("  - GET  /api/v1/config - Get current configuration")
     print("\nPress Ctrl+C to quit")
     
-    uvicorn.run(api_app, host=host, port=port)
+    uvicorn.run(app, host=host, port=port)
 
 if __name__ == "__main__":
-    run_api_server()
+    main()
