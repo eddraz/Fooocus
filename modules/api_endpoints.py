@@ -6,7 +6,7 @@ from modules.flags import inpaint_mask_models
 from extras.inpaint_mask import generate_mask_from_image
 import modules.config
 import modules.flags as flags
-import modules.worker as worker
+import modules.async_worker as worker
 
 app = FastAPI()
 
