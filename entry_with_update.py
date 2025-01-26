@@ -1,46 +1,37 @@
 import os
 import sys
+import platform
+import signal
 
+from modules.launch_util import fooocus_assert, check_system
 
-root = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(root)
-os.chdir(root)
+fooocus_assert(check_system())
 
+os.environ['GRADIO_ANALYTICS_ENABLED'] = 'False'
+os.environ['BITSANDBYTES_NOWELCOME'] = '1'
+os.environ['PYTHONPATH'] = os.path.abspath(".")
 
-try:
-    import pygit2
-    pygit2.option(pygit2.GIT_OPT_SET_OWNER_VALIDATION, 0)
+from args_manager import args
+import modules.flags
+import modules.config
 
-    repo = pygit2.Repository(os.path.abspath(os.path.dirname(__file__)))
+# Disable the visual interface
+args.disable_gradio_queue = True
 
-    branch_name = repo.head.shorthand
+from modules.api_endpoints import app as api_app
+import uvicorn
 
-    remote_name = 'origin'
-    remote = repo.remotes[remote_name]
+def run_api_server():
+    """Start the FastAPI server"""
+    host = args.listen or '127.0.0.1'
+    port = args.port or 8888
+    
+    print(f"\nFooocus API Server starting on http://{host}:{port}")
+    print("Available endpoints:")
+    print("  - POST /api/v1/inpaint-clothing")
+    print("\nPress Ctrl+C to quit")
+    
+    uvicorn.run(api_app, host=host, port=port)
 
-    remote.fetch()
-
-    local_branch_ref = f'refs/heads/{branch_name}'
-    local_branch = repo.lookup_reference(local_branch_ref)
-
-    remote_reference = f'refs/remotes/{remote_name}/{branch_name}'
-    remote_commit = repo.revparse_single(remote_reference)
-
-    merge_result, _ = repo.merge_analysis(remote_commit.id)
-
-    if merge_result & pygit2.GIT_MERGE_ANALYSIS_UP_TO_DATE:
-        print("Already up-to-date")
-    elif merge_result & pygit2.GIT_MERGE_ANALYSIS_FASTFORWARD:
-        local_branch.set_target(remote_commit.id)
-        repo.head.set_target(remote_commit.id)
-        repo.checkout_tree(repo.get(remote_commit.id))
-        repo.reset(local_branch.target, pygit2.GIT_RESET_HARD)
-        print("Fast-forward merge")
-    elif merge_result & pygit2.GIT_MERGE_ANALYSIS_NORMAL:
-        print("Update failed - Did you modify any file?")
-except Exception as e:
-    print('Update failed.')
-    print(str(e))
-
-print('Update succeeded.')
-from launch import *
+if __name__ == "__main__":
+    run_api_server()
