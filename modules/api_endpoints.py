@@ -259,15 +259,29 @@ async def inpaint_clothing(
         
         # Prepare parameters for inpainting
         task_args = [
+            False,  # generate_image_grid
             prompt,  # prompt
             negative_prompt,  # negative prompt
-            'fooocus_expansion',  # style
-            'Speed',  # performance
-            'dpmpp_2m_sde_gpu',  # sampler
-            20,  # steps
-            1.0,  # switch
-            1,  # batch size
+            ['fooocus_expansion'],  # style selections
+            'Speed',  # performance selection
+            '1152×896',  # aspect ratios selection
+            1,  # image number
+            'png',  # output format
+            -1,  # seed
+            True,  # read wildcards in order
+            1.0,  # sharpness
             7.5,  # guidance scale
+            'sd_xl_base_1.0',  # base model
+            'sd_xl_refiner_1.0',  # refiner model
+            0.5,  # refiner switch
+            # LoRA parameters (3 values per LoRA: enabled, name, weight)
+            False, '', 1.0,  # LoRA 1
+            False, '', 1.0,  # LoRA 2
+            False, '', 1.0,  # LoRA 3
+            False, '', 1.0,  # LoRA 4
+            False, '', 1.0,  # LoRA 5
+            True,  # input image checkbox
+            'inpaint',  # current tab
             input_image,  # input image
             mask,  # mask
             'inpaint',  # inpaint method
@@ -275,11 +289,6 @@ async def inpaint_clothing(
             False,  # mask blur
             0.0,  # mask expansion
             False,  # mask only
-            'sd_xl_base_1.0',  # base model
-            'sd_xl_refiner_1.0',  # refiner
-            'None',  # vae
-            [],  # loras
-            1.0,  # image sharpness
             True,  # advanced params
             1.5,  # adm guidance
             0.8,  # adm guidance neg
