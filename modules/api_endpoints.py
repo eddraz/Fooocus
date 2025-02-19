@@ -259,45 +259,77 @@ async def inpaint_clothing(
         
         # Prepare parameters for inpainting
         task_args = [
-            False,  # generate_image_grid
-            prompt,  # prompt
-            negative_prompt,  # negative prompt
-            ['fooocus_expansion'],  # style selections
-            'Speed',  # performance selection
-            '1152×896',  # aspect ratios selection
-            1,  # image number
-            'png',  # output format
-            -1,  # seed
-            True,  # read wildcards in order
-            1.0,  # sharpness
-            7.5,  # guidance scale
-            'sd_xl_base_1.0',  # base model
-            'sd_xl_refiner_1.0',  # refiner model
-            0.5,  # refiner switch
-            # LoRA parameters (3 values per LoRA: enabled, name, weight)
+            'fooocus',  # metadata_scheme
+            True,  # save_metadata_to_images
+            True,  # save_final_enhanced_image_only
+            0,  # inpaint_erode_or_dilate
+            False,  # invert_mask_checkbox
+            True,  # inpaint_advanced_masking_checkbox
+            48,  # inpaint_respective_field
+            0.5,  # inpaint_strength
+            'v1',  # inpaint_engine
+            False,  # inpaint_disable_initial_latent
+            False,  # debugging_inpaint_preprocessor
+            1.0,  # freeu_s2
+            0.99,  # freeu_s1
+            1.02,  # freeu_b2
+            1.01,  # freeu_b1
+            False,  # freeu_enabled
+            1.0,  # controlnet_softness
+            'v1',  # refiner_swap_method
+            100,  # canny_high_threshold
+            50,  # canny_low_threshold
+            False,  # skipping_cn_preprocessor
+            False,  # debugging_cn_preprocessor
+            False,  # mixing_image_prompt_and_inpaint
+            False,  # mixing_image_prompt_and_vary_upscale
+            0.75,  # overwrite_upscale_strength
+            0.75,  # overwrite_vary_strength
+            0,  # overwrite_height
+            0,  # overwrite_width
+            0.5,  # overwrite_switch
+            0,  # overwrite_step
+            'None',  # vae_name
+            'normal',  # scheduler_name
+            'dpmpp_2m_sde_gpu',  # sampler_name
+            1,  # clip_skip
+            True,  # adaptive_cfg
+            0.5,  # adm_scaler_end
+            0.8,  # adm_scaler_negative
+            1.5,  # adm_scaler_positive
+            False,  # black_out_nsfw
+            False,  # disable_seed_increment
+            False,  # disable_intermediate_results
+            False,  # disable_preview
+            mask,  # inpaint_mask_image_upload
+            '',  # inpaint_additional_prompt
+            input_image,  # inpaint_input_image
+            [],  # outpaint_selections
+            None,  # uov_input_image
+            'None',  # uov_method
+            'inpaint',  # current_tab
+            True,  # input_image_checkbox
+            # LoRA parameters (3 values per LoRA: enabled, name, weight) x 5
             False, '', 1.0,  # LoRA 1
             False, '', 1.0,  # LoRA 2
             False, '', 1.0,  # LoRA 3
             False, '', 1.0,  # LoRA 4
             False, '', 1.0,  # LoRA 5
-            True,  # input image checkbox
-            'inpaint',  # current tab
-            input_image,  # input image
-            mask,  # mask
-            'inpaint',  # inpaint method
-            0.5,  # denoising strength
-            False,  # mask blur
-            0.0,  # mask expansion
-            False,  # mask only
-            True,  # advanced params
-            1.5,  # adm guidance
-            0.8,  # adm guidance neg
-            False,  # advanced params
-            False,  # freeu
-            1.01,  # b1
-            1.02,  # b2
-            0.99,  # s1
-            1.0,  # s2
+            0.5,  # refiner_switch
+            'sd_xl_refiner_1.0',  # refiner_model_name
+            'sd_xl_base_1.0',  # base_model_name
+            7.5,  # cfg_scale
+            1.0,  # sharpness
+            True,  # read_wildcards_in_order
+            -1,  # seed
+            'png',  # output_format
+            1,  # image_number
+            '1152×896',  # aspect_ratios_selection
+            'Speed',  # performance_selection
+            ['fooocus_expansion'],  # style_selections
+            negative_prompt,  # negative_prompt
+            prompt,  # prompt
+            False,  # generate_image_grid
         ]
         
         # Create and execute task
