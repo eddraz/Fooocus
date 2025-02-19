@@ -262,7 +262,7 @@ async def inpaint_clothing(
             prompt,  # prompt
             negative_prompt,  # negative prompt
             'fooocus_expansion',  # style
-            'none',  # performance
+            'Speed',  # performance
             'dpmpp_2m_sde_gpu',  # sampler
             20,  # steps
             1.0,  # switch
