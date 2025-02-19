@@ -259,77 +259,80 @@ async def inpaint_clothing(
         
         # Prepare parameters for inpainting
         task_args = [
-            'fooocus',  # metadata_scheme
-            True,  # save_metadata_to_images
-            True,  # save_final_enhanced_image_only
-            0,  # inpaint_erode_or_dilate
-            False,  # invert_mask_checkbox
-            True,  # inpaint_advanced_masking_checkbox
-            48,  # inpaint_respective_field
-            0.5,  # inpaint_strength
-            'v1',  # inpaint_engine
-            False,  # inpaint_disable_initial_latent
-            False,  # debugging_inpaint_preprocessor
-            1.0,  # freeu_s2
-            0.99,  # freeu_s1
-            1.02,  # freeu_b2
-            1.01,  # freeu_b1
-            False,  # freeu_enabled
-            1.0,  # controlnet_softness
-            'v1',  # refiner_swap_method
-            100,  # canny_high_threshold
-            50,  # canny_low_threshold
-            False,  # skipping_cn_preprocessor
-            False,  # debugging_cn_preprocessor
-            False,  # mixing_image_prompt_and_inpaint
-            False,  # mixing_image_prompt_and_vary_upscale
-            0.75,  # overwrite_upscale_strength
-            0.75,  # overwrite_vary_strength
-            0,  # overwrite_height
-            0,  # overwrite_width
-            0.5,  # overwrite_switch
-            0,  # overwrite_step
-            'None',  # vae_name
-            'normal',  # scheduler_name
-            'dpmpp_2m_sde_gpu',  # sampler_name
-            1,  # clip_skip
-            True,  # adaptive_cfg
-            0.5,  # adm_scaler_end
-            0.8,  # adm_scaler_negative
-            1.5,  # adm_scaler_positive
-            False,  # black_out_nsfw
-            False,  # disable_seed_increment
-            False,  # disable_intermediate_results
-            False,  # disable_preview
-            mask,  # inpaint_mask_image_upload
-            '',  # inpaint_additional_prompt
-            input_image,  # inpaint_input_image
-            [],  # outpaint_selections
-            None,  # uov_input_image
-            'None',  # uov_method
-            'inpaint',  # current_tab
-            True,  # input_image_checkbox
+            False,  # generate_image_grid
+            prompt,  # prompt
+            negative_prompt,  # negative_prompt
+            ['fooocus_expansion'],  # style_selections
+            'Speed',  # performance_selection
+            '1152×896',  # aspect_ratios_selection
+            1,  # image_number
+            'png',  # output_format
+            -1,  # seed
+            True,  # read_wildcards_in_order
+            1.0,  # sharpness
+            7.5,  # cfg_scale
+            'sd_xl_base_1.0',  # base_model_name
+            'sd_xl_refiner_1.0',  # refiner_model_name
+            0.5,  # refiner_switch
+            
             # LoRA parameters (3 values per LoRA: enabled, name, weight) x 5
             False, '', 1.0,  # LoRA 1
             False, '', 1.0,  # LoRA 2
             False, '', 1.0,  # LoRA 3
             False, '', 1.0,  # LoRA 4
             False, '', 1.0,  # LoRA 5
-            0.5,  # refiner_switch
-            'sd_xl_refiner_1.0',  # refiner_model_name
-            'sd_xl_base_1.0',  # base_model_name
-            7.5,  # cfg_scale
-            1.0,  # sharpness
-            True,  # read_wildcards_in_order
-            -1,  # seed
-            'png',  # output_format
-            1,  # image_number
-            '1152×896',  # aspect_ratios_selection
-            'Speed',  # performance_selection
-            ['fooocus_expansion'],  # style_selections
-            negative_prompt,  # negative_prompt
-            prompt,  # prompt
-            False,  # generate_image_grid
+            
+            True,  # input_image_checkbox
+            'inpaint',  # current_tab
+            input_image,  # inpaint_input_image
+            mask,  # inpaint_mask_image_upload
+            '',  # inpaint_additional_prompt
+            [],  # outpaint_selections
+            None,  # uov_input_image
+            'None',  # uov_method
+            
+            False,  # disable_preview
+            False,  # disable_intermediate_results
+            False,  # disable_seed_increment
+            False,  # black_out_nsfw
+            1.5,  # adm_scaler_positive
+            0.8,  # adm_scaler_negative
+            0.5,  # adm_scaler_end
+            True,  # adaptive_cfg
+            1,  # clip_skip
+            'dpmpp_2m_sde_gpu',  # sampler_name
+            'normal',  # scheduler_name
+            'None',  # vae_name
+            0,  # overwrite_step
+            0.5,  # overwrite_switch
+            0,  # overwrite_width
+            0,  # overwrite_height
+            0.75,  # overwrite_vary_strength
+            0.75,  # overwrite_upscale_strength
+            False,  # mixing_image_prompt_and_vary_upscale
+            False,  # mixing_image_prompt_and_inpaint
+            False,  # debugging_cn_preprocessor
+            False,  # skipping_cn_preprocessor
+            50,  # canny_low_threshold
+            100,  # canny_high_threshold
+            'v1',  # refiner_swap_method
+            1.0,  # controlnet_softness
+            False,  # freeu_enabled
+            1.01,  # freeu_b1
+            1.02,  # freeu_b2
+            0.99,  # freeu_s1
+            1.0,  # freeu_s2
+            False,  # debugging_inpaint_preprocessor
+            False,  # inpaint_disable_initial_latent
+            'v1',  # inpaint_engine
+            0.5,  # inpaint_strength
+            48,  # inpaint_respective_field
+            True,  # inpaint_advanced_masking_checkbox
+            False,  # invert_mask_checkbox
+            0,  # inpaint_erode_or_dilate
+            True,  # save_final_enhanced_image_only
+            True,  # save_metadata_to_images
+            'fooocus'  # metadata_scheme
         ]
         
         # Create and execute task
