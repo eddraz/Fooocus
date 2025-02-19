@@ -44,7 +44,7 @@ def optimize_masks(masks: torch.Tensor) -> torch.Tensor:
 
 
 def generate_mask_from_image(image: np.ndarray, mask_model: str = 'sam', extras=None,
-                             sam_options: SAMOptions | None = SAMOptions) -> tuple[np.ndarray | None, int | None, int | None, int | None]:
+                             sam_options: SAMOptions | None = SAMOptions, cloth_category: str | None = None) -> tuple[np.ndarray | None, int | None, int | None, int | None]:
     dino_detection_count = 0
     sam_detection_count = 0
     sam_detection_on_mask_count = 0
@@ -54,6 +54,9 @@ def generate_mask_from_image(image: np.ndarray, mask_model: str = 'sam', extras=
 
     if extras is None:
         extras = {}
+
+    if cloth_category is not None:
+        extras['cloth_category'] = cloth_category
 
     if 'image' in image:
         image = image['image']
