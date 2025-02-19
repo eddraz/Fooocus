@@ -253,13 +253,8 @@ async def inpaint_clothing(
             image=input_image,
             mask_model='u2net_cloth_seg',
             cloth_category=cloth_category,
-            dino_prompt_text=None,
-            sam_model=None,
-            box_threshold=None,
-            text_threshold=None,
-            sam_max_detections=None,
-            dino_erode_or_dilate=0,
-            dino_debug=False
+            extras={},
+            sam_options=None
         )
         
         # Prepare parameters for inpainting
