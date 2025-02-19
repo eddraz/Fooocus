@@ -1,0 +1,22 @@
+# Basic text-to-image generation
+curl -X POST "http://localhost:8888/api/v1/generate" \
+  -F "prompt=a beautiful landscape with mountains" \
+  -F "negative_prompt=ugly, blurry" \
+  -F "image_number=1"
+
+# Image-to-image with inpainting
+curl -X POST "http://localhost:8888/api/v1/generate" \
+  -F "prompt=a red car" \
+  -F "base64_image=<base64_of_image>" \
+  -F "base64_mask=<base64_of_mask>" \
+  -F "inpaint_method=Inpaint"
+
+  curl -X POST "http://localhost:8888/api/v1/inpaint" \
+  -F "image=@input.png" \
+  -F "mask=@mask.png" \
+  -F "prompt=a beautiful mountain landscape"
+
+  curl -X POST "http://localhost:8888/api/v1/upscale" \
+  -F "image=@input.png" \
+  -F "upscale_method=4x_UltraSharp" \
+  -F "scale_factor=2.0"
